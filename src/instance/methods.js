@@ -222,23 +222,27 @@ Moon.prototype.renderClass = function(classNames) {
  */
 Moon.prototype.mount = function(el) {
   // Get element from the DOM
+  // 可以是字符串或者原生获取的dom节点
   this.$el = typeof el === 'string' ? document.querySelector(el) : el;
 
   // Remove destroyed state
   this.$destroyed = false;
-
+  // 开发版本报错设置
   if("__ENV__" !== "production" && this.$el === null) {
     // Element not found
     error("Element " + this.$options.$el + " not found");
   }
 
   // Sync Element and Moon instance
+  //将Moon绑定到__moon__中
   this.$el.__moon__ = this;
 
   // Setup template as provided `template` or outerHTML of the Element
+  // 设置当前Moon的$template属性变化，如果传入template则值为template，否则为el的html节点结构
   defineProperty(this, "$template", this.$options.template, this.$el.outerHTML);
 
   // Setup render Function
+  // 如果用户没有传入render函数，则该render函数为空函数，执行模板编辑
   if(this.$render === noop) {
     this.$render = Moon.compile(this.$template);
   }
@@ -322,8 +326,9 @@ Moon.prototype.build = function() {
  */
 Moon.prototype.init = function() {
   log("======= Moon =======");
+  // 这里注意，调用了util中的公共方法，如果存在生命周期init的话，调用init方法
   callHook(this, 'init');
-
+  // 存在el的话，则将moon绑定到整个dom节点el上
   const el = this.$options.el;
   if(el !== undefined) {
     this.mount(el);

@@ -3,15 +3,28 @@
  * @param {Object} instance
  * @param {Object} computed
  */
+/**
+ * 代码解析
+ * by blue
+ */
+// 初始化计算后函数
+// instance传入的是Moon本身
+// computed为用户传入的option.computed对象，
 const initComputed = function(instance, computed) {
+  // 设置需要监听计算的属性
+  // prop为你需要监听的属性，该属性会最后返回计算后的值
   let setComputedProperty = function(prop) {
+    // 获取观察者
     const observer = instance.$observer;
 
     // Flush Cache if Dependencies Change
+    // 设置缓存该属性
     observer.observe(prop);
 
     // Add Getters
+    // 绑定$data中的当前属性prop
     Object.defineProperty(instance.$data, prop, {
+      // get函数
       get: function() {
         // Property Cache
         let cache = null;
@@ -47,6 +60,7 @@ const initComputed = function(instance, computed) {
   }
 
   // Set All Computed Properties
+  // 循环遍历所有的计算后对象，设置计算后对象需要监听的属性
   for(let propName in computed) {
     setComputedProperty(propName);
   }

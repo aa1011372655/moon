@@ -1,5 +1,12 @@
+/**
+ * 代码解析
+ * by blue
+ * @param {*} instance 
+ */
+// 观察者类
 function Observer(instance) {
   // Associated Moon Instance
+  // 传入Moon主类本身
   this.instance = instance;
 
   // Computed Property Cache
@@ -24,11 +31,17 @@ Observer.prototype.observe = function(key) {
     self.cache[key] = undefined;
   }
 }
-
+/**
+ * 通知函数，通知数据的变化
+ * ！！！val传参不知何用
+ */
 Observer.prototype.notify = function(key, val) {
   let depMap = null;
+  // 获取当前对象索引值，且不为undefined
   if((depMap = this.map[key]) !== undefined) {
-    for(let i = 0; i < depMap.length; i++) {
+    var depMapLength=depMap.length
+    // 循环整个获取的当前
+    for(let i = 0; i < depMapLength; i++) {
       this.notify(depMap[i]);
     }
   }
